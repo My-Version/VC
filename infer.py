@@ -121,6 +121,8 @@ def svc(model, src_wav_path, ref_wav_path, synth_set_path=None, f0_factor=0., sp
 
     sf.write(wfname, out_wav.numpy(), 24000)
 
+    return wfname
+
 
 def main(a):
     model_ckpt_path = a.model_ckpt_path
