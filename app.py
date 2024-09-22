@@ -41,7 +41,7 @@ def getVoiceForCover():
         if os.path.exists(result):
             with open(result, 'rb') as cover_file:
                 files = {'file': (os.path.basename(result), cover_file, 'audio/mpeg')}
-                response = requests.post('http://localhost:8080/api/upload', files=files)
+                response = requests.post('http://221.146.39.168:8081/api/upload', files=files)
                 
                 if response.status_code == 200:
                     return jsonify({'message': 'Cover file created and uploaded successfully.'})
@@ -49,7 +49,6 @@ def getVoiceForCover():
                     return jsonify({'error': 'Failed to upload cover file to Spring server'}), 500
         else:
             return jsonify({'error': 'Cover file was not created properly.'}), 500
-
 
 # 커버 생성하는 모델 실행 함수
 def CreateCover(input_file_path):
@@ -85,4 +84,4 @@ def CreateCover(input_file_path):
 if __name__ == '__main__':
     if not os.path.exists('temp'):
         os.makedirs('temp')
-    app.run(debug=True)
+    app.run('0.0.0.0',port=8080, debug=True)
