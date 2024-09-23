@@ -2,9 +2,9 @@ from flask import Flask, request, jsonify
 import requests
 import sys, os
 import time
-import torch
-from pydub import AudioSegment
-from modules.SVCNN import SVCNN
+#import torch
+#from pydub import AudioSegment
+#from modules.SVCNN import SVCNN
 
 app = Flask(__name__)
 
@@ -23,32 +23,33 @@ def merge_vocal(mr, filename):
 # 커버 생성 요청 처리 함수
 @app.route('/upload', methods=['POST'])
 def getVoiceForCover():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
-
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
-
-    if file:
-        temp_path = os.path.join('temp', file.filename)
-        file.save(temp_path)
-
+    return "hello"
+#    if 'file' not in request.files:
+#        return jsonify({'error': 'No file part'}), 400
+#
+#    file = request.files['file']
+#    if file.filename == '':
+#        return jsonify({'error': 'No selected file'}), 400
+#
+#    if file:
+#        temp_path = os.path.join('temp', file.filename)
+#        file.save(temp_path)
+#
         # 동기적으로 모델 처리 후 결과 반환
-        result = CreateCover(temp_path)
-
+#        result = CreateCover(temp_path)
+#
         # 파일이 정상적으로 생성됐는지 확인
-        if os.path.exists(result):
-            with open(result, 'rb') as cover_file:
-                files = {'file': (os.path.basename(result), cover_file, 'audio/mpeg')}
-                response = requests.post('http://221.146.39.168:8081/api/upload', files=files)
-                
-                if response.status_code == 200:
-                    return jsonify({'message': 'Cover file created and uploaded successfully.'})
-                else:
-                    return jsonify({'error': 'Failed to upload cover file to Spring server'}), 500
-        else:
-            return jsonify({'error': 'Cover file was not created properly.'}), 500
+#        if os.path.exists(result):
+#            with open(result, 'rb') as cover_file:
+#                files = {'file': (os.path.basename(result), cover_file, 'audio/mpeg')}
+#                response = requests.post('http://221.146.39.168:8081/upload', files=files)
+#                
+#                if response.status_code == 200:
+#                    return jsonify({'message': 'Cover file created and uploaded successfully.'})
+#                else:
+#                    return jsonify({'error': 'Failed to upload cover file to Spring server'}), 500
+#        else:
+#            return jsonify({'error': 'Cover file was not created properly.'}), 500
 
 # 커버 생성하는 모델 실행 함수
 def CreateCover(input_file_path):
@@ -84,4 +85,4 @@ def CreateCover(input_file_path):
 if __name__ == '__main__':
     if not os.path.exists('temp'):
         os.makedirs('temp')
-    app.run('0.0.0.0',port=8080, debug=True)
+    app.run('0.0.0.0', debug=True)
