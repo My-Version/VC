@@ -6,6 +6,7 @@ import torch
 import soundfile as sf
 import argparse
 
+
 from modules.SVCNN import SVCNN
 from utils.spectrogram import extract_voiced_area
 from utils.pitch_extraction import extract_pitch_ref as extract_pitch, coarse_f0
@@ -122,6 +123,8 @@ def svc(model, src_wav_path, ref_wav_path, synth_set_path=None, f0_factor=0., sp
     sf.write(wfname, out_wav.numpy(), 24000)
 
     return wfname
+
+
 
 
 def main(a):
