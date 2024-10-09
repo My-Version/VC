@@ -14,20 +14,8 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 # 커버 생성 요청 처리 함수
 @app.route('/upload', methods=['GET'])
 def getVoiceForCover():
-    if 'file' not in request.files:
-        return jsonify({'error': 'No file part'}), 400
-
-    file = request.files['file']
-    if file.filename == '':
-        return jsonify({'error': 'No selected file'}), 400
-
-    if file:
-        temp_path = os.path.join('temp', file.filename)
-        file.save(temp_path)
-
-        # 동기적으로 모델 처리 후 결과 반환
-        result = CreateCover(temp_path)
-
+        
+        result = CreateCover('default')
         # 파일이 정상적으로 생성됐는지 확인
         if os.path.exists(result):
             with open(result, 'rb') as cover_file:
@@ -47,3 +35,4 @@ if __name__ == '__main__':
     if not os.path.exists('temp'):
         os.makedirs('temp')
     app.run(host='0.0.0.0', port=5000, debug=True)
+
