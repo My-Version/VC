@@ -329,7 +329,7 @@ class WavLM(nn.Module):
         output_layer: Optional[int] = None,
         ret_layer_results: bool = False,
     ):
-
+        
         if self.feature_grad_mult > 0:
             features = self.feature_extractor(source)
             if self.feature_grad_mult != 1.0:
@@ -355,18 +355,19 @@ class WavLM(nn.Module):
             )
         else:
             x = features
-
+        
         # feature: (B, T, D), float
         # target: (B, T), long
         # x: (B, T, D), float
         # padding_mask: (B, T), bool
         # mask_indices: (B, T), bool
+        torch.cuda.empty_cache()
         x, layer_results = self.encoder(
             x,
             padding_mask=padding_mask,
             layer=None if output_layer is None else output_layer - 1
         )
-
+        
         res = {"x": x, "padding_mask": padding_mask, "features": features, "layer_results": layer_results}
 
         feature = res["features"] if ret_conv else res["x"]

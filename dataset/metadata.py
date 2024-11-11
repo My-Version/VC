@@ -38,7 +38,9 @@ def SplitDataset(wav_list:list[Path], train_valid_ratio=0.9, test_spk_list=['M26
     test_list = []
 
     for wav_file in wav_list:
-        singer = wav_file.parent.parent.name[0] + wav_file.stem.split('_')[0]
+        # singer = wav_file.parent.parent.name[0] + wav_file.stem.split('_')[0]
+        singer = wav_file.stem.split('_')[0]
+        print(singer)
         if singer not in test_spk_list:
             train_list.append(wav_file)
         else:

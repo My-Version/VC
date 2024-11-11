@@ -1,0 +1,7 @@
+python -m utils.pitch_extraction --data_root traindata --n_cpu 6
+
+python -m dataset.prematch_dataset --data_root traindata
+
+python dataset/metadata.py --data_root traindata
+
+python train.py --input_training_file dataset/opensinger-train.csv --input_validation_file dataset/opensinger-valid.csv --ckpt_dir pretrained --config configs/config.json --checkpoint_interval 1000 --training_epochs 3010

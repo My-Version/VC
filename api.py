@@ -10,10 +10,10 @@ from infer import svc
 from modules.SVCNN import SVCNN
 
 def merge_vocal(mr, filename):
-    mr_removed_audio = AudioSegment.from_file("mr/mr.wav")
+    mr_removed_audio = AudioSegment.from_file(mr)
     cover_audio = AudioSegment.from_file(f"{filename}")
     combined_audio = mr_removed_audio.overlay(cover_audio)
-    save_path = "outputs/combine_outputs/combined_output.wav"
+    save_path = f"outputs/combine_outputs/{filename.split('/')[1]}"
     combined_audio.export(save_path, format="wav")
     return save_path
 
@@ -22,9 +22,12 @@ def CreateCover(input_file_path):
     model_ckpt_path = 'pretrained/G_150k.pt'
     speech_enroll = True
     src_wav_path = input_file_path  # 입력된 파일 경로
-    ref_wav_path = "ref_wav/test.wav"
-    num_samples = 15000
+    ref_wav_path = "ref_wav/김형석_교수님_노마스크.wav"
+    # ref_wav_path = "ref_wav/천송현.wav"
+    # num_samples = 15000
+    num_samples = 40000
     key_shift = 0
+    mr_path = 'mr/성시경_차마_mr.wav'
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     
     print(f'using {device} for inference')
@@ -41,7 +44,7 @@ def CreateCover(input_file_path):
     t1 = time.time()
     print(f"{t1-t0:.2f}s to perform the conversion")
 
-    result = merge_vocal("", cover_name)
+    result = merge_vocal(mr_path, cover_name)
     
     if os.path.exists(result):
         return result

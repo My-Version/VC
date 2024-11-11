@@ -16,28 +16,42 @@ from utils.tools import fast_cosine_dist
 
 DOWNSAMPLE_FACTOR = 320
 
+# def make_opensinger_df(root_path: Path) -> pd.DataFrame:
+#     all_files = []
+#     folders = ['ManRaw', 'WomanRaw']
+#     for f in folders:
+#         all_files.extend(list((root_path/f).rglob('*.wav')))
+#     # f.parts[-3][:-3]: Man/Woman
+#     speakers = [f.parts[-3][:-3] + '-' + f.stem.split('_')[0]  for f in all_files]
+#     df = pd.DataFrame({'path': all_files, 'speaker': speakers})
+#     return df
+
 def make_opensinger_df(root_path: Path) -> pd.DataFrame:
     all_files = []
-    folders = ['ManRaw', 'WomanRaw']
-    for f in folders:
-        all_files.extend(list((root_path/f).rglob('*.wav')))
+    #folders = ['ManRaw', 'WomanRaw']
+    #for f in folders:
+    all_files.extend(list((root_path).rglob('*.wav')))
     # f.parts[-3][:-3]: Man/Woman
-    speakers = [f.parts[-3][:-3] + '-' + f.stem.split('_')[0]  for f in all_files]
+    speakers = [f.stem.split('_')[0]  for f in all_files]
+    #print(speakers)
     df = pd.DataFrame({'path': all_files, 'speaker': speakers})
     return df
 
-
 def main(args):
+    # os.environ['PYTORCH_CUDA_ALLOC_CONF'] = 'expandable_segments:True'
     data_root = Path(args.data_root)
     out_dir = Path(args.out_dir) if args.out_dir is not None else data_root/'wavlm_features'
-    device = torch.device(args.device)
+    # device = torch.device(args.device)
+    device = torch.device('cpu')
+    #device = 'cpu'
     seed = args.seed
     
     ls_df = make_opensinger_df(data_root)
 
     print(f"Loading wavlm.")
-    wavlm_ckpt = torch.load('pretrained/WavLM-Large.pt', map_location='cpu')
+    wavlm_ckpt = torch.load('pretrained/WavLM-Large.pt', map_location='cpu',weights_only= True)
     cfg = WavLMConfig(wavlm_ckpt['cfg'])
+    
     wavlm = WavLM(cfg)
     wavlm.load_state_dict(wavlm_ckpt['model'])
     wavlm = wavlm.eval()
@@ -60,8 +74,8 @@ def get_features(path, wavlm, device='cpu', output_layer=6):
     x = F.pad(x, (0, n_pad), value=0)
 
     # extract the representation of each layer
+    
     wav_input_16khz = x.to(device)
-
     features = wavlm.extract_features(wav_input_16khz, output_layer=output_layer, ret_layer_results=False)[0]
     
     return features.squeeze(0)
@@ -92,7 +106,7 @@ def extract(df: pd.DataFrame, wavlm: nn.Module, device, data_root: Path, out_dir
         for i, row in pb:
             feats = get_features(row.path, wavlm, device)
             feature_cache[row.path] = feats
-
+        
         # 2. replace the wavlm features of each singing audio with the wavlm features of other songs by the same singer.
         pb = tqdm(paths.iterrows(), total=len(paths), desc=f'prematching {speaker}')
         for i, row in pb:

@@ -14,7 +14,7 @@ import torch
 from torch import Tensor, nn
 from torch.nn import Parameter
 import torch.nn.functional as F
-
+import gc
 
 class TransposeLast(nn.Module):
     def __init__(self, deconstruct_idx=None):
@@ -500,11 +500,13 @@ class MultiheadAttention(nn.Module):
                 assert key_bsz == bsz
                 assert value is not None
                 assert src_len, bsz == value.shape[:2]
-
+        # print(f'batch size :{bsz}, tgt_len :{tgt_len}, src_len : {src_len}')
         if self.has_relative_attention_bias and position_bias is None:
             position_bias = self.compute_bias(tgt_len, src_len)
+            gc.collect()
             position_bias = position_bias.unsqueeze(0).repeat(bsz, 1, 1, 1).view(bsz * self.num_heads, tgt_len, src_len)
 
+        
         if (
                 not is_tpu  # don't use PyTorch version on TPUs
                 and incremental_state is None

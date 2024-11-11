@@ -105,8 +105,11 @@ def mel_spectrogram(y, n_fft, num_mels, sampling_rate, hop_size, win_size, fmin,
 
 
 def get_dataset_filelist(a):
-    train_df = pd.read_csv(a.input_training_file, sep='\t')
-    valid_df = pd.read_csv(a.input_validation_file, sep='\t')
+    
+    train_df = pd.read_csv(a.input_training_file, sep='\t',encoding='euc-kr')
+    
+    valid_df = pd.read_csv(a.input_validation_file, sep='\t',encoding='euc-kr')
+   
     return train_df, valid_df
 
 

@@ -4,6 +4,10 @@ import random
 import librosa
 import parselmouth
 import time
+import argparse
+from tqdm import tqdm
+from pathlib import Path
+from multiprocessing import Process
 from utils.spectrogram import load_wav
 
 np.random.seed(0)
@@ -195,6 +199,7 @@ def extract_pitch_ref(wav_path: str, ref_path: str, predefined_factor=0, speech_
         factor = ref_mean / source_mean
         if speech_enroll:
             factor = factor * 1.2
+            # factor = factor * 1.5
         print(f'pitch shift factor: {factor:.2f}')
 
     # Modify f0 to fit with different persons
@@ -232,10 +237,6 @@ def main(args):
 
 
 if __name__ == '__main__':
-    import argparse
-    from tqdm import tqdm
-    from pathlib import Path
-    from multiprocessing import Process
 
     parser = argparse.ArgumentParser(description="Compute pitch and loudness")
 
