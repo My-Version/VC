@@ -48,7 +48,10 @@ def getVoiceForCover():
 
 
 if __name__ == '__main__':
-    CreateCover('src_wav/박효신_숨.wav')
+    src_path = 'src_wav/박효신_숨.wav'
+    user = '김형석_교수님_노마스크.wav'
+    songname = '박효신_숨'
+    CreateCover(src_path,user,songname)
     # if not os.path.exists('temp'):
     #     os.makedirs('temp')
     # app.run(host='0.0.0.0', port=8080, debug=True)
