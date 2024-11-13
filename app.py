@@ -18,6 +18,12 @@ def get_file_as_bytes():
         return jsonify({'error': 'No file part'}), 400
 
     file = request.files['file']
+    
+    songname = request.form.get('music')
+    src_path = 'scr_wav/'+songname+'.wav'
+
+    print("노래 이름 : ", songname)
+    print("소스 링크 : ", src_path)
 
     if file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
@@ -25,8 +31,6 @@ def get_file_as_bytes():
     save_path = os.path.join('/home/ec2-user/', file.filename)
     file.save(save_path)
     try:
-        # 파일을 byte[]로 읽음
-        # file_bytes = file.read()
         return send_file(
             save_path,  # byte[] 데이터를 BytesIO로 래핑
             as_attachment=True,  # 다운로드로 전송
@@ -39,10 +43,14 @@ def get_file_as_bytes():
 @app.route('/upload', methods=['POST'])
 def getVoiceForCover():
         print('입력 실행')
-        # result = ''
+
         result = CreateCover('default')
-        # 파일이 정상적으로 생성됐는지 확인
-        
+
+        # 넘어온 "artist_노래" 형태의 음성 파일 일므
+        songname = request.form.get('music')
+        # "src_wav/artist_노래.wav" 형태의 음성 파일 path
+        src_path = 'src_wav/'+songname+'.wav'
+
         if 'file' not in request.files:
             return jsonify({'error': 'No file part in the request'}), 400
 
@@ -57,10 +65,8 @@ def getVoiceForCover():
         file.save(save_path)  # 파일 저장
 
         try:
-        # 파일을 byte[]로 읽음
-        # file_bytes = file.read()
             return send_file(
-                save_path,  # byte[] 데이터를 BytesIO로 래핑
+                save_path,  # 커버 파일 저장 경로
                 as_attachment=True,  # 다운로드로 전송
                 mimetype='application/octet-stream'  # MIME 타입 설정 (적절한 MIME 타입으로 변경 가능)
             )
