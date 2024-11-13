@@ -3,3 +3,4 @@ pretrained/*
 *.pt
 *.npy
 *.wav
+traindata/*

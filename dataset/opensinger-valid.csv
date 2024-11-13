@@ -1,2 +1,5 @@
 audio_path	feat_path	pitch_path
-traindata\성시경_차마.wav	traindata\wavlm_features\성시경_차마.pt	traindata\pitch\성시경_차마.npy
+traindata\ba7_7(1)24khz.wav	traindata\wavlm_features\ba7_7(1)24khz.pt	traindata\pitch\ba7_7(1)24khz.npy
+traindata\ba5_5(1)24khz.wav	traindata\wavlm_features\ba5_5(1)24khz.pt	traindata\pitch\ba5_5(1)24khz.npy
+traindata\ro_2(4)24khz.wav	traindata\wavlm_features\ro_2(4)24khz.pt	traindata\pitch\ro_2(4)24khz.npy
+traindata\ba3_3(3)24khz.wav	traindata\wavlm_features\ba3_3(3)24khz.pt	traindata\pitch\ba3_3(3)24khz.npy

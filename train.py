@@ -132,6 +132,7 @@ def train(rank, a, h):
         
 
         for i, batch in pb:
+            print(f"steps = {steps}")
             if rank == 0:
                 start_b = time.time()
             x, f0, pitch, y, _, y_mel = batch
