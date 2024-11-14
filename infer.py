@@ -14,6 +14,7 @@ from utils.pitch_extraction import extract_pitch_ref as extract_pitch, coarse_f0
 import logging
 import warnings
 import absl.logging
+
 absl.logging.set_verbosity(absl.logging.ERROR)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 logging.getLogger().setLevel(logging.ERROR)
