@@ -44,8 +44,6 @@ def get_file_as_bytes():
 def getVoiceForCover():
         print('입력 실행')
 
-        result = CreateCover('default')
-
         # 넘어온 "artist_노래" 형태의 음성 파일 일므
         songname = request.form.get('music')
         # "src_wav/artist_노래.wav" 형태의 음성 파일 path
@@ -58,15 +56,16 @@ def getVoiceForCover():
             return jsonify({'error': 'No selected file'}), 400
 
         file = request.files['file']  # 파일 가져오기
-        file_name = request.form.get('file_name', 'received_file.mp3')  # 파일명 (필요시 기본 파일명 지정)
-
+          # 파일명 (필요시 기본 파일명 지정)
+        file_name = request.form.get('file_name', 'test.wav')
         # 파일을 서버에 저장할 경로 설정
-        save_path = os.path.join('/temp', file_name)
+        save_path = os.path.join('/ref_wav', file_name)
         file.save(save_path)  # 파일 저장
+        result = CreateCover(src_path,file_name,songname)
 
         try:
             return send_file(
-                save_path,  # 커버 파일 저장 경로
+                result,  # 커버 파일 저장 경로
                 as_attachment=True,  # 다운로드로 전송
                 mimetype='application/octet-stream'  # MIME 타입 설정 (적절한 MIME 타입으로 변경 가능)
             )
