@@ -15,8 +15,11 @@ random.seed(0)
 
 
 def REAPER_F0(wav_path, sr=24000, frame_period=0.01):  # frame_period s
+    current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    reaper_path = os.path.join(current_dir, 'REAPER', 'build', 'reaper.exe')
+    print(reaper_path)
     if not os.path.isfile(f'{wav_path}.f0'):
-        cmd = f'C:/Users/pc/Desktop/SVC/REAPER/build/reaper.exe -i {wav_path} -f {wav_path}.f0 -e {frame_period} -x 1000 -m 65 -a'
+        cmd = f'{reaper_path} -i {wav_path} -f {wav_path}.f0 -e {frame_period} -x 1000 -m 65 -a'
         os.system(cmd)
     f0 = []
     try:
