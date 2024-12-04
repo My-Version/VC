@@ -22,7 +22,8 @@ def CreateCover(input_file_path,user,songname):
     model_ckpt_path = 'pretrained/G_150k.pt'
     speech_enroll = True
     src_wav_path = input_file_path  # 입력된 파일 경로
-    ref_wav_path = 'ref_wav/'+user
+    ref_wav_path = user
+    # ref_wav_path = 'ref_wav/'+user
     # ref_wav_path = "ref_wav/김형석_교수님_노마스크.wav"
     # ref_wav_path = "ref_wav/천송현.wav"
     # num_samples = 15000
@@ -52,3 +53,12 @@ def CreateCover(input_file_path,user,songname):
         return result
     else:
         raise FileNotFoundError("The combined output file was not created.")
+    
+
+def convert_audio_to_wav(dir):
+    audio = AudioSegment.from_file(dir)
+    audio = audio.set_channels(1)
+    output_path = os.path.join(f"{os.path.splitext(dir)[0]}.wav")
+    audio.export(output_path, format="wav")
+    
+    return output_path

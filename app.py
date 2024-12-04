@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify, send_file
 import requests
 import sys, os
 from api import CreateCover
+from api import convert_audio_to_wav
 
 app = Flask(__name__)
 
@@ -61,6 +62,8 @@ def getVoiceForCover():
         # 파일을 서버에 저장할 경로 설정
         save_path = os.path.join('/ref_wav', file_name)
         file.save(save_path)  # 파일 저장
+        
+        file_name = convert_audio_to_wav(save_path)
         result = CreateCover(src_path,file_name,songname)
 
         try:
@@ -73,7 +76,7 @@ def getVoiceForCover():
             return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    # src_path = 'src_wav/박효신_숨.wav'
+    # src_path = 'src_wav/박효신_숨_cut.wav'
     # user = '김형석_교수님_노마스크.wav'
     # songname = '박효신_숨'
     # CreateCover(src_path,user,songname)
